@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wedo_todo.CardInfo
+import com.example.wedo_todo.R
 import kotlinx.android.synthetic.main.view.view.*
 
 class Adapter(var data: List<CardInfo>) : RecyclerView.Adapter<Adapter.viewHolder>() {
@@ -21,7 +23,7 @@ class Adapter(var data: List<CardInfo>) : RecyclerView.Adapter<Adapter.viewHolde
     }
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
-        when (data[position].priority.toLowerCase()) {
+        when (data[position].priority.toLowerCase()) { //우선순위에 따라 색 변경
             "high" -> holder.layout.setBackgroundColor(Color.parseColor("#F05454"))
             "medium" -> holder.layout.setBackgroundColor(Color.parseColor("#EDC988"))
             else -> holder.layout.setBackgroundColor(Color.parseColor("#00917C"))
