@@ -14,6 +14,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         todoAdapter = TodoAdapter(mutableListOf())
 
+        //to change title of activity
+        val actionBar = supportActionBar
+        actionBar!!.title = "Wedo Todo"
+
         rvTodoItems.adapter = todoAdapter
         rvTodoItems.layoutManager = LinearLayoutManager(this)
 
