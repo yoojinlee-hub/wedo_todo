@@ -2,6 +2,7 @@ package com.example.todolist
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val context = this
+
         todoAdapter = TodoAdapter(mutableListOf())
        // for(i in TodoAdapter(mutableListOf()).todos){
         //    if(i.isChecked){
@@ -45,6 +48,11 @@ class MainActivity : AppCompatActivity() {
                 val todo = Todo(todoTitle)
                 todoAdapter.addTodo(todo)
                 etTodoTitle.text.clear()
+
+                var db = DataBaseHandler(context)
+                db.insertData(todo)
+            }else{
+                Toast.makeText(context,"Please fill it",Toast.LENGTH_SHORT)
             }
         }
         btnDeleteDoneTodo.setOnClickListener {
