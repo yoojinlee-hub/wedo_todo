@@ -1,29 +1,40 @@
 package com.example.todolist
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     //Noti 객체 생성
     private lateinit var notificationHelper: NotificationHelper
-
     private lateinit var todoAdapter : TodoAdapter
+
+    //getting shared preferences
+  //  public var sp = getSharedPreferences("your_shared_pref_name", MODE_PRIVATE)
+    //initializing editor
+ //   public var editor = sp.edit()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        todoAdapter = TodoAdapter(mutableListOf())
 
+        todoAdapter = TodoAdapter(mutableListOf())
+       // for(i in TodoAdapter(mutableListOf()).todos){
+        //    if(i.isChecked){
+        //       sp.all
+       //     }
+    //    }
 
         //to change title of activity
         val actionBar = supportActionBar
-        actionBar!!.title = "Wedo Todo"
+        actionBar!!.title = "root@root-Wedo Todo: - "
 
         rvTodoItems.adapter = todoAdapter
         rvTodoItems.layoutManager = LinearLayoutManager(this)
@@ -78,4 +89,5 @@ class MainActivity : AppCompatActivity() {
         notificationHelper.getManager().notify(1, nb.build())
     }
 }
+
 
