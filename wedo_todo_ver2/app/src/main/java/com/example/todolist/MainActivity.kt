@@ -53,8 +53,7 @@ class MainActivity : AppCompatActivity() {
             todoAdapter.addTodo(todo)
             etTodoTitle.text.clear()
 
-            MyApplication.prefs.setString("todo_undo", todoTitle)
-
+            MyApplication.prefs.setString("todo_all", todoTitle)
         }
         btnDeleteDoneTodo.setOnClickListener {
             val builder = AlertDialog.Builder(this)
