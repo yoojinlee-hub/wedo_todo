@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        Toast.makeText(this@MainActivity, "오늘도 파이팅", Toast.LENGTH_SHORT).show()
+
 
         todoAdapter = TodoAdapter(mutableListOf())
        // for(i in TodoAdapter(mutableListOf()).todos){
