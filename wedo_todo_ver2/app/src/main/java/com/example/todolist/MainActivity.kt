@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.ContentValues
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var notificationHelper: NotificationHelper
     private lateinit var todoAdapter : TodoAdapter
 
+
+    //if(rs.moveToNext())
+        //Toast.makeText(applicationContext,rs.getString(1),Toast.LENGTH_LONG).show()
     //getting shared preferences
   //  public var sp = getSharedPreferences("your_shared_pref_name", MODE_PRIVATE)
     //initializing editor
@@ -26,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val context = this
 
         todoAdapter = TodoAdapter(mutableListOf())
        // for(i in TodoAdapter(mutableListOf()).todos){
@@ -44,16 +47,12 @@ class MainActivity : AppCompatActivity() {
 
         btnAddTodo.setOnClickListener {
             val todoTitle = etTodoTitle.text.toString()
-            if(todoTitle.isNotEmpty()) {
-                val todo = Todo(todoTitle)
-                todoAdapter.addTodo(todo)
-                etTodoTitle.text.clear()
+            val todo = Todo(todoTitle)
+            todoAdapter.addTodo(todo)
+            etTodoTitle.text.clear()
 
-                var db = DataBaseHandler(context)
-                db.insertData(todo)
-            }else{
-                Toast.makeText(context,"Please fill it",Toast.LENGTH_SHORT)
-            }
+            MyApplication.prefs.setString("todo_undo", todoTitle)
+
         }
         btnDeleteDoneTodo.setOnClickListener {
             val builder = AlertDialog.Builder(this)
