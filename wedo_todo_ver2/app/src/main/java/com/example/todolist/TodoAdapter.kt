@@ -38,13 +38,13 @@ class TodoAdapter(
     }
 
     fun addTodo(todo: Todo) {
+        MyApplication.prefs.setString("todo_all", todo.title)
         todos.add(todo)
         notifyItemInserted(todos.size -1)
-
-        //getSharedPreferences add -> mainActivity.kt 에서 수행 함
+        //getSharedPreferences add
        // editor.putString("todo", todo.toString());
        // editor.apply();
-
+        notifyDataSetChanged()
     }
 
     fun deleteDoneTodos() {

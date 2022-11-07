@@ -33,8 +33,11 @@ class MainActivity : AppCompatActivity() {
 
         todoAdapter = TodoAdapter(mutableListOf())
         for(i in TodoAdapter(mutableListOf()).todos){
-            todoAdapter.addTodo(prefs.getIt("todo_all", i.title))
+            //todoAdapter.addTodo(prefs.getIt("todo_all", i.title) as Todo)
+            //for test //fail 저장 자체가 되지 않은 듯
+            showNotification("test", i.title)
         }
+        todoAdapter = todoAdapter
         // for(i in TodoAdapter(mutableListOf()).todos){
         //    if(i.isChecked){
         //       sp.all
@@ -55,7 +58,8 @@ class MainActivity : AppCompatActivity() {
             todoAdapter.addTodo(todo)
             etTodoTitle.text.clear()
 
-            MyApplication.prefs.setString("todo_all", todoTitle)
+            //TodoAdapter로 옮김
+            // MyApplication.prefs.setString("todo_all", todoTitle)
         }
         btnDeleteDoneTodo.setOnClickListener {
             val builder = AlertDialog.Builder(this)
