@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.LayoutInflater
@@ -40,7 +41,7 @@ class TodoAdapter(
         todos.add(todo)
         notifyItemInserted(todos.size -1)
 
-        //getSharedPreferences add
+        //getSharedPreferences add -> mainActivity.kt 에서 수행 함
        // editor.putString("todo", todo.toString());
        // editor.apply();
 
@@ -53,7 +54,6 @@ class TodoAdapter(
             if(i.isChecked)
                 MyApplication.prefs.delete("todo_all",i.toString())
         }
-        //  editor.apply();
 
         todos.removeAll {
             todo -> todo.isChecked
@@ -74,6 +74,7 @@ class TodoAdapter(
                         curTodo.isChecked = !curTodo.isChecked
                     }
                 }
+
             }
 
         }

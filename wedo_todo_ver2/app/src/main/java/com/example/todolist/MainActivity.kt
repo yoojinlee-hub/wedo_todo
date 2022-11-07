@@ -1,13 +1,12 @@
 package com.example.todolist
 
-import android.content.ContentValues
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todolist.MyApplication.Companion.prefs
 import com.example.todolist.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -32,19 +31,22 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this@MainActivity, "오늘도 파이팅", Toast.LENGTH_SHORT).show()
 
-
         todoAdapter = TodoAdapter(mutableListOf())
-       // for(i in TodoAdapter(mutableListOf()).todos){
+        for(i in TodoAdapter(mutableListOf()).todos){
+            todoAdapter.addTodo(prefs.getIt("todo_all", i.title))
+        }
+        // for(i in TodoAdapter(mutableListOf()).todos){
         //    if(i.isChecked){
         //       sp.all
-       //     }
-    //    }
+        //     }
+        //    }
 
         //to change title of activity
         val actionBar = supportActionBar
         actionBar!!.title = "root@root-Wedo Todo: - "
 
         rvTodoItems.adapter = todoAdapter
+
         rvTodoItems.layoutManager = LinearLayoutManager(this)
 
         btnAddTodo.setOnClickListener {
