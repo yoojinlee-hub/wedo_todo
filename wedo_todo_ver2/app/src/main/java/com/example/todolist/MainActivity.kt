@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
-import com.example.todolist.MyApplication.Companion.prefs
 import com.example.todolist.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -18,13 +17,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var notificationHelper: NotificationHelper
     private lateinit var todoAdapter : TodoAdapter
 
-
+    //Room
+    // 싱글톤 패턴을 사용하지 않은 경우
+    public var db = Room.databaseBuilder(
+        applicationContext,
+        TodoDatabase::class.java,
+        "user-database"
+    ).allowMainThreadQueries() // 그냥 강제로 실행
+        .build()
     //if(rs.moveToNext())
-        //Toast.makeText(applicationContext,rs.getString(1),Toast.LENGTH_LONG).show()
+    //Toast.makeText(applicationContext,rs.getString(1),Toast.LENGTH_LONG).show()
     //getting shared preferences
-  //  public var sp = getSharedPreferences("your_shared_pref_name", MODE_PRIVATE)
+    //  public var sp = getSharedPreferences("your_shared_pref_name", MODE_PRIVATE)
     //initializing editor
- //   public var editor = sp.edit()
+    //   public var editor = sp.edit()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +39,10 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this@MainActivity, "오늘도 파이팅", Toast.LENGTH_SHORT).show()
 
         todoAdapter = TodoAdapter(mutableListOf())
+
+
+
+        //Shared
         //for(i in TodoAdapter(mutableListOf()).todos){
             //todoAdapter.addTodo(prefs.getIt("todo_all", i.title) as Todo)
             //for test //fail 저장 자체가 되지 않은 듯
@@ -55,11 +65,9 @@ class MainActivity : AppCompatActivity() {
         btnAddTodo.setOnClickListener {
             val todoTitle = etTodoTitle.text.toString()
             val todo = Todo(todoTitle)
+
             todoAdapter.addTodo(todo)
             etTodoTitle.text.clear()
-
-            //TodoAdapter로 옮김
-            // MyApplication.prefs.setString("todo_all", todoTitle)
         }
         btnDeleteDoneTodo.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -84,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             }
             // 부정 버튼 추가
             builder.setNegativeButton("취소") { dialog, which ->
-
+                Toast.makeText(this@MainActivity, "취소하셨습니다", Toast.LENGTH_SHORT).show()
             }
 
             // 뒤로 가기 or 바깥 부분 터치

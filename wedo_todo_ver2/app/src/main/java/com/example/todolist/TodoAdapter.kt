@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.item_todo.view.*
 
@@ -18,7 +19,10 @@ class TodoAdapter(
 
     class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
+
         return TodoViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_todo,
@@ -29,6 +33,7 @@ class TodoAdapter(
     }
 
     private fun toggleStrikeThrough(tvTodoTitle: TextView, isChecked: Boolean) {
+
         if(isChecked) {
             tvTodoTitle.paintFlags = tvTodoTitle.paintFlags or STRIKE_THRU_TEXT_FLAG
 
@@ -38,9 +43,16 @@ class TodoAdapter(
     }
 
     fun addTodo(todo: Todo) {
-        MyApplication.prefs.setString("todo_all", todo.title)
+        //SharedPreferences
+        //MyApplication.prefs.setString("todo_all", todo.title)
+
+        //room
+        var newTodo = todo
+        MainActivity.db.todoDao().insert(newTodo)
+
         todos.add(todo)
         notifyItemInserted(todos.size -1)
+
         //getSharedPreferences add
        // editor.putString("todo", todo.toString());
        // editor.apply();
@@ -54,6 +66,12 @@ class TodoAdapter(
         //    if(i.isChecked)
         //        MyApplication.prefs.delete("todo_all",i.toString())
        // }
+
+        //delete with ROOM
+        for(i in TodoAdapter(mutableListOf()).todos){
+            if(i.isChecked)
+                MainActivity.db.todoDao().deleteTodoByName(i.title)
+        }
 
         todos.removeAll {
             todo -> todo.isChecked
