@@ -22,7 +22,6 @@ class TodoAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
-
         return TodoViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_todo,
@@ -46,10 +45,6 @@ class TodoAdapter(
         //SharedPreferences
         //MyApplication.prefs.setString("todo_all", todo.title)
 
-        //room
-        var newTodo = todo
-        MainActivity.db.todoDao().insert(newTodo)
-
         todos.add(todo)
         notifyItemInserted(todos.size -1)
 
@@ -67,11 +62,6 @@ class TodoAdapter(
         //        MyApplication.prefs.delete("todo_all",i.toString())
        // }
 
-        //delete with ROOM
-        for(i in TodoAdapter(mutableListOf()).todos){
-            if(i.isChecked)
-                MainActivity.db.todoDao().deleteTodoByName(i.title)
-        }
 
         todos.removeAll {
             todo -> todo.isChecked
