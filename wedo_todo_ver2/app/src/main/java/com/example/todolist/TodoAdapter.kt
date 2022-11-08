@@ -44,16 +44,16 @@ class TodoAdapter(
         //getSharedPreferences add
        // editor.putString("todo", todo.toString());
        // editor.apply();
-        notifyDataSetChanged()
+        //notifyDataSetChanged()
     }
 
     fun deleteDoneTodos() {
 
         //getSharedPreferences delete
-        for(i in todos){
-            if(i.isChecked)
-                MyApplication.prefs.delete("todo_all",i.toString())
-        }
+       // for(i in todos){
+        //    if(i.isChecked)
+        //        MyApplication.prefs.delete("todo_all",i.toString())
+       // }
 
         todos.removeAll {
             todo -> todo.isChecked

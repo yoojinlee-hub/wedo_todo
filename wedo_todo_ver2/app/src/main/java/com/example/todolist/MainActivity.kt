@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.example.todolist.MyApplication.Companion.prefs
 import com.example.todolist.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,12 +33,11 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this@MainActivity, "오늘도 파이팅", Toast.LENGTH_SHORT).show()
 
         todoAdapter = TodoAdapter(mutableListOf())
-        for(i in TodoAdapter(mutableListOf()).todos){
+        //for(i in TodoAdapter(mutableListOf()).todos){
             //todoAdapter.addTodo(prefs.getIt("todo_all", i.title) as Todo)
             //for test //fail 저장 자체가 되지 않은 듯
-            showNotification("test", i.title)
-        }
-        todoAdapter = todoAdapter
+        //    showNotification("test", i.title)
+        //}
         // for(i in TodoAdapter(mutableListOf()).todos){
         //    if(i.isChecked){
         //       sp.all
