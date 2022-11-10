@@ -13,13 +13,11 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.item_todo.view.*
 
 class TodoAdapter(
-    val todos: MutableList<Todo>
+    var todos: MutableList<Todo>
 ) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
   //  val editor: SharedPreferences.Editor = MainActivity().editor
 
     class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         return TodoViewHolder(
@@ -61,7 +59,6 @@ class TodoAdapter(
         //    if(i.isChecked)
         //        MyApplication.prefs.delete("todo_all",i.toString())
        // }
-
 
         todos.removeAll {
             todo -> todo.isChecked

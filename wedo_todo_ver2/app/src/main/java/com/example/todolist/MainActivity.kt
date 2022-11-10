@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.todolist.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,60 +21,55 @@ class MainActivity : AppCompatActivity() {
 
     //Noti 객체 생성
     private lateinit var notificationHelper: NotificationHelper
-    private lateinit var todoAdapter : TodoAdapter
+    private var todoAdapter : TodoAdapter = TodoAdapter(mutableListOf())
 
     // room db
     private lateinit var db: TodoDatabase
-
-    //if(rs.moveToNext())
-    //Toast.makeText(applicationContext,rs.getString(1),Toast.LENGTH_LONG).show()
-    //getting shared preferences
-    //getting shared preferences
-    //  public var sp = getSharedPreferences("your_shared_pref_name", MODE_PRIVATE)
-    //initializing editor
-    //   public var editor = sp.edit()
+    val datas = mutableListOf<Todo>()
+    val datas_delete = mutableListOf<Todo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
 
+        //to change title of activity
+        val actionBar = supportActionBar
+        actionBar!!.title = "root@todo)list-WedoTodo: - "
+
         Toast.makeText(this@MainActivity, "오늘도 파이팅", Toast.LENGTH_SHORT).show()
 
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //db = TodoDatabase.getInstance(applicationContext)!!
-
-        //ERROR
-        //Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
-        //https://stackoverflow.com/questions/44167111/android-room-simple-select-query-cannot-access-database-on-the-main-thread
-        db =  Room.databaseBuilder(this, TodoDatabase::class.java, "MyDatabase").allowMainThreadQueries().build()
-        todoAdapter = TodoAdapter(mutableListOf())
-
-        //Shared
-        //for(i in TodoAdapter(mutableListOf()).todos){
-            //todoAdapter.addTodo(prefs.getIt("todo_all", i.title) as Todo)
-            //for test //fail 저장 자체가 되지 않은 듯
-        //    showNotification("test", i.title)
-        //}
-        // for(i in TodoAdapter(mutableListOf()).todos){
-        //    if(i.isChecked){
-        //       sp.all
-        //     }
-        //    }
-
-        //to change title of activity
-        val actionBar = supportActionBar
-        actionBar!!.title = "root@root-Wedo Todo: - "
+        db = TodoDatabase.getInstance(applicationContext)!!
 
         rvTodoItems.adapter = todoAdapter
-
         rvTodoItems.layoutManager = LinearLayoutManager(this)
+
+        //room에서 데이터 불러와야 함
+        val r = Runnable {
+            val todoes = db.todoDao().getAll()
+            datas.clear()
+
+            for(todo in todoes) {
+                //if(!todo.isChecked)
+                    datas.add(Todo(todo.title,todo.isChecked))
+            }
+            todoAdapter.todos = datas
+        }
+        val thread = Thread(r)
+        thread.start()
+
+        todoAdapter.notifyDataSetChanged()
+
 
         btnAddTodo.setOnClickListener {
             val todoTitle = etTodoTitle.text.toString()
             val todo = Todo(todoTitle)
 
-            db.todoDao().insert(todo)
+            CoroutineScope(Dispatchers.IO).launch { // 다른애 한테 일 시키기
+                db!!.todoDao().insert(todo)
+            }
+            //db.todoDao().insert(todo) -> ERROR
 
             todoAdapter.addTodo(todo)
             etTodoTitle.text.clear()
@@ -86,11 +82,19 @@ class MainActivity : AppCompatActivity() {
             builder.setMessage("동의하십니까?")    // 내용
             // 긍정 버튼 추가
             builder.setPositiveButton("예") { dialog, which ->
-                //delete with ROOM
-                for(i in TodoAdapter(mutableListOf()).todos){
-                    if(i.isChecked)
-                        db.todoDao().deleteTodoByName(i.title)
+                var count = 0
+                val r = Runnable {
+                    val todoes = db.todoDao().getAll()
+
+                    for(i in todoAdapter.todos){
+                        if(i.isChecked){
+                            db.todoDao().deleteTodoByName(i.title)
+                            count+=1
+                        }
+                    }
                 }
+                val thread = Thread(r)
+                thread.start()
 
                 todoAdapter.deleteDoneTodos()
 
@@ -99,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 
                 val titleEdit = "Wedo Todo";
                 val title: String = titleEdit.toString()
-                val messageEdit = "[root]: Congratuation\uD83D\uDC4F\uD83D\uDC4F you finished something todo! "
+                val messageEdit = "[root]: Congratuation\uD83D\uDC4F\uD83D\uDC4F you finished "+count+" things todo! "
                 val message: String = messageEdit.toString()
 
                 //알림 호출
@@ -112,7 +116,6 @@ class MainActivity : AppCompatActivity() {
 
             // 뒤로 가기 or 바깥 부분 터치
             builder.setOnCancelListener {
-
             }
             builder.show()
         }
@@ -125,6 +128,7 @@ class MainActivity : AppCompatActivity() {
 
         notificationHelper.getManager().notify(1, nb.build())
     }
+
 }
 
 
