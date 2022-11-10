@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     // room db
     private lateinit var db: TodoDatabase
     val datas = mutableListOf<Todo>()
-    val datas_delete = mutableListOf<Todo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         //to change title of activity
         val actionBar = supportActionBar
-        actionBar!!.title = "root@todo)list-WedoTodo: - "
+        actionBar!!.title = "root@todo_list-WedoTodo: - "
 
         Toast.makeText(this@MainActivity, "오늘도 파이팅", Toast.LENGTH_SHORT).show()
 

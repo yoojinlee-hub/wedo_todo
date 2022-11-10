@@ -54,12 +54,6 @@ class TodoAdapter(
 
     fun deleteDoneTodos() {
 
-        //getSharedPreferences delete
-       // for(i in todos){
-        //    if(i.isChecked)
-        //        MyApplication.prefs.delete("todo_all",i.toString())
-       // }
-
         todos.removeAll {
             todo -> todo.isChecked
         }
