@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.media.SoundPool
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -26,6 +27,10 @@ class MainActivity : AppCompatActivity() {
     // room db
     private lateinit var db: TodoDatabase
     val datas = mutableListOf<Todo>()
+
+    //music
+    val soundPool = SoundPool.Builder().build()
+    var soundId : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,8 +110,11 @@ class MainActivity : AppCompatActivity() {
                 val messageEdit = "[root]: Congratuation\uD83D\uDC4F\uD83D\uDC4F you finished "+count+" things todo! "
                 val message: String = messageEdit.toString()
 
-                //알림 호출
-                showNotification(title, message)
+                if(count>0){
+                    //알림 호출
+                    soundPool.load(this,R.raw.clap,1)
+                    showNotification(title, message)
+                }
             }
             // 부정 버튼 추가
             builder.setNegativeButton("취소") { dialog, which ->
